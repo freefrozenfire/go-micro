@@ -7,15 +7,15 @@ import (
 	"github.com/micro/go-micro/v3/metrics"
 )
 
-// ErrPrometheusIsCruft is a terrible thing to have to do. The Prometheus client should really appreciate errors more:
-var ErrPrometheusIsCruft = errors.New("The venerable Prometheus client panicked. Did you do something like change the tag cardinality or the type of a metric?")
+// ErrPrometheusPanic is a catch-all for the panics which can be thrown by the Prometheus client:
+var ErrPrometheusPanic = errors.New("The Prometheus client panicked. Did you do something like change the tag cardinality or the type of a metric?")
 
 // Count is a counter with key/value tags:
 // New values are added to any previous one (eg "number of hits")
 func (r *Reporter) Count(name string, value int64, tags metrics.Tags) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			err = ErrPrometheusIsCruft
+			err = ErrPrometheusPanic
 		}
 	}()
 
@@ -34,7 +34,7 @@ func (r *Reporter) Count(name string, value int64, tags metrics.Tags) (err error
 func (r *Reporter) Gauge(name string, value float64, tags metrics.Tags) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			err = ErrPrometheusIsCruft
+			err = ErrPrometheusPanic
 		}
 	}()
 
@@ -53,7 +53,7 @@ func (r *Reporter) Gauge(name string, value float64, tags metrics.Tags) (err err
 func (r *Reporter) Timing(name string, value time.Duration, tags metrics.Tags) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			err = ErrPrometheusIsCruft
+			err = ErrPrometheusPanic
 		}
 	}()
 
